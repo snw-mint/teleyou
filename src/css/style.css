@@ -19,6 +19,15 @@
     --m3-on-tertiary-container: #31111D;
     --m3-inverse-surface: #313033;
     --m3-inverse-on-surface: #F4EFF4;
+    /* Material Web token bridge */
+    --md-sys-color-primary: var(--m3-primary);
+    --md-sys-color-on-primary: var(--m3-on-primary);
+    --md-sys-color-primary-container: var(--m3-primary-container);
+    --md-sys-color-on-primary-container: var(--m3-on-primary-container);
+    --md-sys-color-surface: var(--m3-surface);
+    --md-sys-color-on-surface: var(--m3-on-surface);
+    --md-sys-color-surface-container: var(--m3-surface-container);
+    --md-sys-color-on-surface-variant: var(--m3-on-surface-variant);
 }
 
 [data-theme="dark"] {
@@ -37,6 +46,13 @@
     --m3-on-tertiary-container: #FFD9E2;
     --m3-inverse-surface: #E6E1E5;
     --m3-inverse-on-surface: #313033;
+    /* Material Web token bridge — dark overrides */
+    --md-sys-color-primary: var(--m3-primary);
+    --md-sys-color-on-primary: var(--m3-on-primary);
+    --md-sys-color-surface: var(--m3-surface);
+    --md-sys-color-on-surface: var(--m3-on-surface);
+    --md-sys-color-surface-container: var(--m3-surface-container);
+    --md-sys-color-on-surface-variant: var(--m3-on-surface-variant);
 }
 * {
     margin: 0;
@@ -485,4 +501,54 @@ body {
 .m3-plain-tooltip.visible {
     opacity: 1;
     transform: scale(1);
+}
+.export-actions-container {
+    position: sticky;
+    bottom: -32px; 
+    margin: auto -32px -32px -32px; 
+    padding: 52px 32px 32px 32px;
+    display: flex;
+    flex-direction: row; 
+    justify-content: center; 
+    gap: 12px; 
+    z-index: 100;
+    background: linear-gradient(to top, var(--m3-surface) 75%, transparent);
+    pointer-events: none; 
+}
+
+.m3-export-btn {
+    pointer-events: auto; 
+    flex: 1; /* Faz os botões dividirem o espaço igualmente */
+    height: 56px; 
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Espaço entre o ícone e o texto */
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    background-color: var(--m3-tertiary);
+    color: var(--m3-on-tertiary);
+    transition: opacity 0.2s ease, transform 0.1s ease;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.m3-export-btn:hover {
+    opacity: 0.9;
+}
+
+.m3-export-btn:active {
+    transform: scale(0.98);
+}
+
+.m3-export-btn svg {
+    flex-shrink: 0;
+}
+
+.m3-export-btn .export-text {
+    white-space: nowrap;
 }
