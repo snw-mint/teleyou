@@ -24,10 +24,12 @@ document.addEventListener('DOMContentLoaded', () => {
             rootElement.setAttribute('data-theme', 'light');
             iconSun.style.display = 'none';
             iconMoon.style.display = 'block';
+            themeBtn.setAttribute('data-tooltip', 'Switch to dark theme');
         } else {
             rootElement.setAttribute('data-theme', 'dark');
             iconSun.style.display = 'block';
             iconMoon.style.display = 'none';
+            themeBtn.setAttribute('data-tooltip', 'Switch to light theme');
         }
 
         if (currentExtractedTheme) {
@@ -83,6 +85,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+const btnMobile = document.getElementById('btn-mobile');
+    const btnDesktop = document.getElementById('btn-desktop');
+    const mockupMobile = document.getElementById('mockup-mobile');
+    const mockupDesktop = document.getElementById('mockup-desktop');
+
+    btnMobile.addEventListener('click', () => {
+        if (btnMobile.classList.contains('active')) return;
+        
+        btnDesktop.classList.remove('active');
+        btnMobile.classList.add('active');
+        
+        mockupDesktop.classList.remove('active');
+        mockupMobile.classList.add('active');
+    });
+
+    btnDesktop.addEventListener('click', () => {
+        if (btnDesktop.classList.contains('active')) return;
+        
+        btnMobile.classList.remove('active');
+        btnDesktop.classList.add('active');
+        
+        mockupMobile.classList.remove('active');
+        mockupDesktop.classList.add('active');
+    });
+
     randomizeColorBtn.addEventListener('click', () => {
         wallItems.forEach(w => w.classList.remove('active'));
         uploadTriggerBtn.classList.remove('active');
@@ -95,22 +122,50 @@ document.addEventListener('DOMContentLoaded', () => {
         currentExtractedTheme = themeFromSourceColor(sourceColorArgb);
         applyMaterialThemeToUI(currentExtractedTheme);
     });
-});
 
+    const tooltipElement = document.getElementById('m3-tooltip');
+    const tooltipTriggers = document.querySelectorAll('[data-tooltip]');
+
+    const showTooltip = (e) => {
+        const trigger = e.currentTarget;
+        const text = trigger.getAttribute('data-tooltip');
+        if (!text) return;
+        tooltipElement.textContent = text;
+        tooltipElement.classList.add('visible');
+        const rect = trigger.getBoundingClientRect();
+        const tooltipRect = tooltipElement.getBoundingClientRect();
+        const placeBelow = trigger.getAttribute('data-tooltip-pos') === 'below';
+        let topPosition = placeBelow ? rect.bottom + 8 : rect.top - tooltipRect.height - 8;
+        let leftPosition = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+        if (!placeBelow && topPosition < 8) topPosition = rect.bottom + 8;
+        if (leftPosition < 8) leftPosition = 8;
+        const rightOverflow = leftPosition + tooltipRect.width - window.innerWidth + 8;
+        if (rightOverflow > 0) leftPosition -= rightOverflow;
+        tooltipElement.style.top = `${topPosition}px`;
+        tooltipElement.style.left = `${leftPosition}px`;
+    };
+
+    const hideTooltip = () => {
+        tooltipElement.classList.remove('visible');
+    };
+
+    tooltipTriggers.forEach(trigger => {
+        trigger.addEventListener('mouseenter', showTooltip);
+        trigger.addEventListener('mouseleave', hideTooltip);
+        trigger.addEventListener('focus', showTooltip);
+        trigger.addEventListener('blur', hideTooltip);
+    });
+});
 async function extractThemeFromImage(imageUrl) {
     const imgElement = new Image();
     imgElement.crossOrigin = "anonymous";
     imgElement.src = imageUrl;
-
     await new Promise(resolve => { imgElement.onload = resolve; });
-
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     const MAX_SIZE = 128; 
-    
     let width = imgElement.width;
     let height = imgElement.height;
-
     if (width > height) {
         if (width > MAX_SIZE) {
             height *= MAX_SIZE / width;
@@ -122,50 +177,53 @@ async function extractThemeFromImage(imageUrl) {
             height = MAX_SIZE;
         }
     }
-
     canvas.width = width;
     canvas.height = height;
-    
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
     ctx.drawImage(imgElement, 0, 0, width, height);
-
     const tinyImage = new Image();
     tinyImage.src = canvas.toDataURL('image/png');
-    
     await new Promise(resolve => { tinyImage.onload = resolve; });
-
     try {
         const sourceColor = await sourceColorFromImage(tinyImage);
         currentExtractedTheme = themeFromSourceColor(sourceColor);
-        
         applyMaterialThemeToUI(currentExtractedTheme);
     } catch (error) {
         console.error("Color extraction failed:", error);
     }
 }
-
 function applyMaterialThemeToUI(theme) {
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     const scheme = isDark ? theme.schemes.dark : theme.schemes.light;
-
     const root = document.documentElement;
-    
     root.style.setProperty('--m3-primary', hexFromArgb(scheme.primary));
     root.style.setProperty('--m3-on-primary', hexFromArgb(scheme.onPrimary));
     root.style.setProperty('--m3-primary-container', hexFromArgb(scheme.primaryContainer));
     root.style.setProperty('--m3-on-primary-container', hexFromArgb(scheme.onPrimaryContainer));
+    root.style.setProperty('--m3-secondary', hexFromArgb(scheme.secondary));
+    root.style.setProperty('--m3-tertiary', hexFromArgb(scheme.tertiary));
+    root.style.setProperty('--m3-error', hexFromArgb(scheme.error));
+    root.style.setProperty('--m3-neutral', hexFromArgb(scheme.outline));
+    root.style.setProperty('--m3-neutral-variant', hexFromArgb(scheme.outlineVariant));
     root.style.setProperty('--m3-surface', hexFromArgb(scheme.surface));
     root.style.setProperty('--m3-on-surface', hexFromArgb(scheme.onSurface));
     root.style.setProperty('--m3-surface-container', hexFromArgb(scheme.surfaceVariant));
     root.style.setProperty('--m3-on-surface-variant', hexFromArgb(scheme.onSurfaceVariant));
-
+    root.style.setProperty('--m3-secondary', hexFromArgb(scheme.secondary));
+    root.style.setProperty('--m3-tertiary', hexFromArgb(scheme.tertiary));
+    root.style.setProperty('--m3-on-tertiary', hexFromArgb(scheme.onTertiary));
+    root.style.setProperty('--m3-tertiary-container', hexFromArgb(scheme.tertiaryContainer));
+    root.style.setProperty('--m3-on-tertiary-container', hexFromArgb(scheme.onTertiaryContainer));
+    root.style.setProperty('--m3-error', hexFromArgb(scheme.error));
+    root.style.setProperty('--m3-inverse-surface', hexFromArgb(scheme.inverseSurface));
+    root.style.setProperty('--m3-inverse-on-surface', hexFromArgb(scheme.inverseOnSurface));
     const colorIndicator = document.querySelector('.color-picker-card .color-indicator');
     const colorHex = document.querySelector('.color-picker-card .color-hex');
-    
     if (colorIndicator && colorHex) {
         const primaryHex = hexFromArgb(scheme.primary);
         colorIndicator.style.backgroundColor = primaryHex;
         colorHex.textContent = primaryHex.toUpperCase();
     }
+
 }

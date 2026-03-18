@@ -3,19 +3,40 @@
     --m3-on-primary: #FFFFFF;
     --m3-primary-container: #EADDFF;
     --m3-on-primary-container: #21005D;
+    --m3-secondary: #625B71;
+    --m3-tertiary: #7D5260;
+    --m3-error: #B3261E;
+    --m3-neutral: #79747E;
+    --m3-neutral-variant: #CAC4D0;
     --m3-surface: #FEF7FF;
     --m3-on-surface: #1D1B20;
     --m3-surface-container: #F3EDF7;
     --m3-on-surface-variant: #49454F;
-    --modal-bg: #EADDFF;
-    --modal-text: #21005D;
     --transition-speed: 0.3s;
+    --switch-bg: #F3EDE1;
+    --m3-on-tertiary: #FFFFFF;
+    --m3-tertiary-container: #FFD9E2;
+    --m3-on-tertiary-container: #31111D;
+    --m3-inverse-surface: #313033;
+    --m3-inverse-on-surface: #F4EFF4;
 }
+
 [data-theme="dark"] {
     --m3-surface: #141218;
     --m3-on-surface: #E6E0E9;
     --m3-on-surface-variant: #CAC4D0;
     --m3-surface-container: #211F26;
+    --m3-secondary: #CCC2DC;
+    --m3-tertiary: #EFB8C8;
+    --m3-error: #F2B8B5;
+    --m3-neutral: #938F99;
+    --m3-neutral-variant: #49454F;
+    --switch-bg: #2D2A26;
+    --m3-on-tertiary: #492532;
+    --m3-tertiary-container: #633B48;
+    --m3-on-tertiary-container: #FFD9E2;
+    --m3-inverse-surface: #E6E1E5;
+    --m3-inverse-on-surface: #313033;
 }
 * {
     margin: 0;
@@ -338,4 +359,130 @@ body {
 }
 [data-theme="dark"] ::-webkit-scrollbar-thumb {
     border-color: var(--m3-surface);
+}
+.mockup-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px;
+    background-color: var(--m3-surface);
+    position: relative;
+    height: 100%;
+    overflow-y: auto;
+    width: 100%;
+}
+.mockup-controls {
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+.m3-segmented-btn {
+    background-color: color-mix(in srgb, var(--m3-neutral-variant) 25%, transparent);
+    border-radius: 100px;
+    display: inline-flex;
+    padding: 8px;
+    gap: 15px;
+    transition: background-color var(--transition-speed) ease;
+}
+.segment-item {
+    border: none;
+    background-color: var(--m3-tertiary-container);
+    color: var(--m3-on-tertiary-container);
+    width: 50px; 
+    height: 50px; 
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s cubic-bezier(0.2, 0, 0, 1), color 0.3s cubic-bezier(0.2, 0, 0, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.segment-item .material-symbols-rounded {
+    font-size: 28px;
+}
+.segment-item.active {
+    background-color: var(--m3-tertiary);
+    color: var(--m3-on-tertiary);
+}
+.mockup-container {
+    display: grid;
+    grid-template-areas: "mockup";
+    width: 100%;
+    flex: 1;
+    place-items: center;
+    position: relative;
+}
+.mockup-view {
+    grid-area: mockup;
+    display: flex;
+    gap: 24px;
+    width: 100%;
+    max-width: 900px;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+    transition: opacity 0.4s cubic-bezier(0.2, 0, 0, 1), transform 0.4s cubic-bezier(0.2, 0, 0, 1);
+    pointer-events: none;
+}
+.mockup-view.active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+.device-frame {
+    background-color: var(--m3-neutral-variant); 
+    padding: 10px; 
+    border-radius: 10px; 
+    transition: background-color var(--transition-speed) ease;
+}
+.device-screen {
+    background-color: var(--m3-surface-container); 
+    border-radius: 8px; 
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.phone-frame {
+    flex: 1;
+    height: 600px;
+}
+.desktop-frame {
+    width: 100%;
+    max-width: 900px;
+    height: 600px;
+}
+.split-screen {
+    display: flex;
+}
+.sidebar-mock {
+    width: 320px;
+    background-color: var(--m3-surface-container);
+    border-right: 1px solid rgba(128, 128, 128, 0.1);
+}
+.chat-mock {
+    flex: 1;
+    background-color: var(--m3-surface-container);
+}
+.m3-plain-tooltip {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: var(--m3-inverse-surface);
+    color: var(--m3-inverse-on-surface);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 0.15s cubic-bezier(0.2, 0, 0, 1), transform 0.15s cubic-bezier(0.2, 0, 0, 1);
+    white-space: nowrap;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+.m3-plain-tooltip.visible {
+    opacity: 1;
+    transform: scale(1);
 }

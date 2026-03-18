@@ -38,12 +38,12 @@
             </div>
 
             <div class="action-section">
-                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme" data-tooltip="Switch to dark theme">
                     <span class="material-symbols-rounded icon-moon">dark_mode</span>
                     <span class="material-symbols-rounded icon-sun" style="display: none;">light_mode</span>
                 </button>
                 
-                <button id="info-btn" class="icon-btn" aria-label="Information">
+                <button id="info-btn" class="icon-btn" aria-label="Information" data-tooltip="Show project info">
                     <span class="material-symbols-rounded">info</span>
                 </button>
 
@@ -83,7 +83,7 @@
                 <div class="color-picker-card">
                     <div class="color-indicator" style="background-color: var(--m3-primary);"></div>
                     <span class="color-hex">#65558F</span>
-                    <button class="icon-btn small-btn" aria-label="Randomize Color">
+                    <button class="icon-btn small-btn" aria-label="Randomize Color" data-tooltip="Randomize color">
                         <span class="material-symbols-rounded">shuffle</span>
                     </button>
                 </div>
@@ -94,11 +94,11 @@
                 </div>
                 <div class="palette-list">
                     <div class="palette-card"><div class="color-indicator" style="background-color: var(--m3-primary);"></div><span>Primary</span></div>
-                    <div class="palette-card"><div class="color-indicator" style="background-color: var(--m3-primary-container);"></div><span>Secondary</span></div>
-                    <div class="palette-card"><div class="color-indicator" style="background-color: #7D5260;"></div><span>Tertiary</span></div>
-                    <div class="palette-card"><div class="color-indicator" style="background-color: #B3261E;"></div><span>Error</span></div>
-                    <div class="palette-card"><div class="color-indicator" style="background-color: #49454F;"></div><span>Neutral</span></div>
-                    <div class="palette-card"><div class="color-indicator" style="background-color: #79747E;"></div><span>Neutral Variant</span></div>
+                    <div class="palette-card"><div class="color-indicator" style="background-color: var(--m3-secondary);"></div><span>Secondary</span></div>
+                    <div class="palette-card"><div class="color-indicator" style="background-color: var(--m3-tertiary);"></div><span>Tertiary</span></div>
+                    <div class="palette-card"><div class="color-indicator" style="background-color: var(--m3-error);"></div><span>Error</span></div>
+                    <div class="palette-card"><div class="color-indicator" style="background-color: var(--m3-neutral);"></div><span>Neutral</span></div>
+                    <div class="palette-card"><div class="color-indicator" style="background-color: var(--m3-neutral-variant);"></div><span>Neutral Variant</span></div>
                 </div>
 
                 <details class="expandable-colors">
@@ -116,10 +116,41 @@
                 </details>
             </aside>
 
-            <section class="mockup-area">
-                </section>
+        <section class="mockup-area">
+                <div class="mockup-controls">
+                    <div class="m3-segmented-btn">
+                        <button id="btn-mobile" class="segment-item active" aria-label="Mobile View" data-tooltip="Mobile View" data-tooltip-pos="below">
+                            <span class="material-symbols-rounded">smartphone</span>
+                        </button>
+                        <button id="btn-desktop" class="segment-item" aria-label="Desktop View" data-tooltip="Desktop View" data-tooltip-pos="below">
+                            <span class="material-symbols-rounded">desktop_windows</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mockup-container">
+                    <div id="mockup-mobile" class="mockup-view active">
+                        <div class="device-frame phone-frame">
+                            <div class="device-screen"></div>
+                        </div>
+                        <div class="device-frame phone-frame">
+                            <div class="device-screen"></div>
+                        </div>
+                    </div>
+
+                    <div id="mockup-desktop" class="mockup-view">
+                        <div class="device-frame desktop-frame">
+                            <div class="device-screen split-screen">
+                                <div class="sidebar-mock"></div>
+                                <div class="chat-mock"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
     </div>
+    <div id="m3-tooltip" class="m3-plain-tooltip" role="tooltip"></div>
 
     <script type="module" src="./src/js/main.js"></script>
 </body>
