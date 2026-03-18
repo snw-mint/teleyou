@@ -7,6 +7,8 @@
     --m3-on-surface: #1D1B20;
     --m3-surface-container: #F3EDF7;
     --m3-on-surface-variant: #49454F;
+    --modal-bg: #EADDFF;
+    --modal-text: #21005D;
     --transition-speed: 0.3s;
 }
 [data-theme="dark"] {
