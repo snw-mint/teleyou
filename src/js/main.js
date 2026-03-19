@@ -3,6 +3,7 @@ import { generateMobileTheme, downloadAttheme } from './theme-mobile.js';
 import { generateDesktopColors, downloadDesktopTheme } from './theme-desktop.js';
 import { createHctPicker } from './hct-picker.js';
 let currentExtractedTheme = null;
+let currentWallpaperUrl = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
@@ -59,6 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const bgImage = window.getComputedStyle(item).backgroundImage;
             const url = bgImage.slice(5, -2).replace(/"/g, "");
+            currentWallpaperUrl = url;
             
             requestAnimationFrame(() => {
                 requestAnimationFrame(() => {
@@ -80,6 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const imageUrl = URL.createObjectURL(file);
             uploadTriggerBtn.style.backgroundImage = `url('${imageUrl}')`;
             uploadTriggerBtn.classList.add('active');
+            currentWallpaperUrl = imageUrl;
             
             requestAnimationFrame(() => {
                 requestAnimationFrame(() => {
@@ -123,6 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const randomHex = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
         const sourceColorArgb = argbFromHex(randomHex);
         
+        currentWallpaperUrl = null;
         currentExtractedTheme = themeFromSourceColor(sourceColorArgb);
         applyMaterialThemeToUI(currentExtractedTheme);
     });
@@ -247,8 +251,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-
-    // ── HCT Picker for source color circle ───────────────────────────────────
     const sourceColorDot = document.querySelector('.color-picker-card .color-indicator');
     if (sourceColorDot) {
         sourceColorDot.setAttribute('role', 'button');
@@ -311,31 +313,87 @@ async function extractThemeFromImage(imageUrl) {
         console.error("Color extraction failed:", error);
     }
 }
+function applyToMockup(scheme) {
+    const safeGet = (key, fallback) => scheme[key] ?? scheme[fallback];
+    document.querySelectorAll('.chat-screen').forEach(screen => {
+        screen.style.setProperty('--tg-background',             hexFromArgb(scheme.background));
+        screen.style.setProperty('--tg-surface',                hexFromArgb(scheme.surface));
+        screen.style.setProperty('--tg-surface-container',      hexFromArgb(safeGet('surfaceContainer', 'surfaceVariant')));
+        screen.style.setProperty('--tg-surface-container-low',  hexFromArgb(safeGet('surfaceContainerLow', 'surfaceVariant')));
+        screen.style.setProperty('--tg-surface-container-high', hexFromArgb(safeGet('surfaceContainerHigh', 'primaryContainer')));
+        screen.style.setProperty('--tg-on-surface',             hexFromArgb(scheme.onSurface));
+        screen.style.setProperty('--tg-on-surface-variant',     hexFromArgb(scheme.onSurfaceVariant));
+        screen.style.setProperty('--tg-on-primary-container',   hexFromArgb(scheme.onPrimaryContainer));
+        screen.style.setProperty('--tg-primary',                hexFromArgb(scheme.primary));
+        screen.style.setProperty('--tg-primary-container',      hexFromArgb(scheme.primaryContainer));
+        screen.style.setProperty('--tg-on-primary',             hexFromArgb(scheme.onPrimary));
+        screen.style.setProperty('--tg-secondary',              hexFromArgb(scheme.secondary));
+        screen.style.setProperty('--tg-secondary-container',    hexFromArgb(scheme.secondaryContainer));
+        screen.style.setProperty('--tg-tertiary',               hexFromArgb(scheme.tertiary));
+        screen.style.setProperty('--tg-tertiary-container',     hexFromArgb(scheme.tertiaryContainer));
+        screen.style.setProperty('--tg-inverse-surface',        hexFromArgb(scheme.inverseSurface));
+        screen.style.setProperty('--tg-inverse-on-surface',     hexFromArgb(scheme.inverseOnSurface));
+        screen.style.setProperty('--tg-inverse-primary',        hexFromArgb(scheme.inversePrimary));
+        screen.style.setProperty('--tg-error',                  hexFromArgb(scheme.error));
+        screen.style.setProperty('--tg-outline',                hexFromArgb(scheme.outline));
+        screen.style.setProperty('--tg-outline-variant',        hexFromArgb(scheme.outlineVariant));
+        screen.style.setProperty('--tg-unread-bg',              hexFromArgb(scheme.primaryContainer));
+        screen.style.setProperty('--tg-unread-fg',              hexFromArgb(scheme.onSurface));
+        if (currentWallpaperUrl) {
+            screen.style.backgroundImage = `url('${currentWallpaperUrl}')`;
+            screen.style.backgroundSize = 'cover';
+            screen.style.backgroundPosition = 'center';
+        } else {
+            screen.style.backgroundImage = 'none';
+            screen.style.backgroundSize = '';
+            screen.style.backgroundPosition = '';
+        }
+    });
+    document.querySelectorAll('.mockup-scope').forEach(scope => {
+        scope.style.setProperty('--tg-background',             hexFromArgb(scheme.background));
+        scope.style.setProperty('--tg-surface',                hexFromArgb(scheme.surface));
+        scope.style.setProperty('--tg-surface-container',      hexFromArgb(safeGet('surfaceContainer', 'surfaceVariant')));
+        scope.style.setProperty('--tg-surface-container-high', hexFromArgb(safeGet('surfaceContainerHigh', 'primaryContainer')));
+        scope.style.setProperty('--tg-on-surface',             hexFromArgb(scheme.onSurface));
+        scope.style.setProperty('--tg-on-surface-variant',     hexFromArgb(scheme.onSurfaceVariant));
+        scope.style.setProperty('--tg-on-primary-container',   hexFromArgb(scheme.onPrimaryContainer));
+        scope.style.setProperty('--tg-primary',                hexFromArgb(scheme.primary));
+        scope.style.setProperty('--tg-primary-container',      hexFromArgb(scheme.primaryContainer));
+        scope.style.setProperty('--tg-on-primary',             hexFromArgb(scheme.onPrimary));
+        scope.style.setProperty('--tg-secondary',              hexFromArgb(scheme.secondary));
+        scope.style.setProperty('--tg-secondary-container',    hexFromArgb(scheme.secondaryContainer));
+        scope.style.setProperty('--tg-tertiary',               hexFromArgb(scheme.tertiary));
+        scope.style.setProperty('--tg-outline-variant',        hexFromArgb(scheme.outlineVariant));
+        scope.style.setProperty('--tg-unread-bg',              hexFromArgb(scheme.primaryContainer));
+        scope.style.setProperty('--tg-unread-fg',              hexFromArgb(scheme.onSurface));
+    });
+}
+
 function applyMaterialThemeToUI(theme) {
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     const scheme = isDark ? theme.schemes.dark : theme.schemes.light;
     const root = document.documentElement;
-    root.style.setProperty('--m3-primary', hexFromArgb(scheme.primary));
-    root.style.setProperty('--m3-on-primary', hexFromArgb(scheme.onPrimary));
-    root.style.setProperty('--m3-primary-container', hexFromArgb(scheme.primaryContainer));
-    root.style.setProperty('--m3-on-primary-container', hexFromArgb(scheme.onPrimaryContainer));
-    root.style.setProperty('--m3-secondary', hexFromArgb(scheme.secondary));
-    root.style.setProperty('--m3-tertiary', hexFromArgb(scheme.tertiary));
-    root.style.setProperty('--m3-error', hexFromArgb(scheme.error));
-    root.style.setProperty('--m3-neutral', hexFromArgb(theme.palettes.neutral.tone(isDark ? 80 : 40)));
-    root.style.setProperty('--m3-neutral-variant', hexFromArgb(theme.palettes.neutralVariant.tone(isDark ? 80 : 40)));
-    root.style.setProperty('--m3-surface', hexFromArgb(scheme.surface));
-    root.style.setProperty('--m3-on-surface', hexFromArgb(scheme.onSurface));
-    root.style.setProperty('--m3-surface-container', hexFromArgb(scheme.surfaceVariant));
-    root.style.setProperty('--m3-on-surface-variant', hexFromArgb(scheme.onSurfaceVariant));
-    root.style.setProperty('--m3-secondary', hexFromArgb(scheme.secondary));
-    root.style.setProperty('--m3-tertiary', hexFromArgb(scheme.tertiary));
-    root.style.setProperty('--m3-on-tertiary', hexFromArgb(scheme.onTertiary));
-    root.style.setProperty('--m3-tertiary-container', hexFromArgb(scheme.tertiaryContainer));
-    root.style.setProperty('--m3-on-tertiary-container', hexFromArgb(scheme.onTertiaryContainer));
-    root.style.setProperty('--m3-error', hexFromArgb(scheme.error));
-    root.style.setProperty('--m3-inverse-surface', hexFromArgb(scheme.inverseSurface));
-    root.style.setProperty('--m3-inverse-on-surface', hexFromArgb(scheme.inverseOnSurface));
+    root.style.setProperty('--m3-primary',                hexFromArgb(scheme.primary));
+    root.style.setProperty('--m3-on-primary',             hexFromArgb(scheme.onPrimary));
+    root.style.setProperty('--m3-primary-container',      hexFromArgb(scheme.primaryContainer));
+    root.style.setProperty('--m3-on-primary-container',   hexFromArgb(scheme.onPrimaryContainer));
+    root.style.setProperty('--m3-secondary',              hexFromArgb(scheme.secondary));
+    root.style.setProperty('--m3-tertiary',               hexFromArgb(scheme.tertiary));
+    root.style.setProperty('--m3-on-tertiary',            hexFromArgb(scheme.onTertiary));
+    root.style.setProperty('--m3-tertiary-container',     hexFromArgb(scheme.tertiaryContainer));
+    root.style.setProperty('--m3-on-tertiary-container',  hexFromArgb(scheme.onTertiaryContainer));
+    root.style.setProperty('--m3-error',                  hexFromArgb(scheme.error));
+    root.style.setProperty('--m3-neutral',                hexFromArgb(theme.palettes.neutral.tone(isDark ? 80 : 40)));
+    root.style.setProperty('--m3-neutral-variant',        hexFromArgb(theme.palettes.neutralVariant.tone(isDark ? 80 : 40)));
+    root.style.setProperty('--m3-surface',                hexFromArgb(scheme.surface));
+    root.style.setProperty('--m3-on-surface',             hexFromArgb(scheme.onSurface));
+    root.style.setProperty('--m3-surface-container',      hexFromArgb(scheme.surfaceVariant));
+    root.style.setProperty('--m3-on-surface-variant',     hexFromArgb(scheme.onSurfaceVariant));
+    root.style.setProperty('--m3-inverse-surface',        hexFromArgb(scheme.inverseSurface));
+    root.style.setProperty('--m3-inverse-on-surface',     hexFromArgb(scheme.inverseOnSurface));
+
+    applyToMockup(scheme);
+
     const colorIndicator = document.querySelector('.color-picker-card .color-indicator');
     const colorHex = document.querySelector('.color-picker-card .color-hex');
     if (colorIndicator && colorHex) {
@@ -348,7 +406,6 @@ function applyMaterialThemeToUI(theme) {
         hexFromArgb(scheme.primaryContainer),
         hexFromArgb(scheme.onPrimaryContainer)
     );
-
 }
 
 function getThemeForExport() {
@@ -363,14 +420,6 @@ function getThemeForExport() {
     currentExtractedTheme = themeFromSourceColor(argbFromHex(primaryHex));
     return currentExtractedTheme;
 }
-
-// src/js/main.js
-
-/**
- * Gera um favicon SVG dinâmico mantendo o desenho e o container originais.
- * @param {string} bgHex - A cor de fundo (primaryContainer).
- * @param {string} iconHex - A cor do ícone (onPrimaryContainer).
- */
 function updateDynamicFavicon(bgHex, iconHex) {
     const faviconTag = document.getElementById('dynamic-favicon');
     if (!faviconTag) return;
