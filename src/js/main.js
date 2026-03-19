@@ -385,6 +385,11 @@ function applyMaterialThemeToUI(theme) {
     root.style.setProperty('--m3-error',                  hexFromArgb(scheme.error));
     root.style.setProperty('--m3-neutral',                hexFromArgb(theme.palettes.neutral.tone(isDark ? 80 : 40)));
     root.style.setProperty('--m3-neutral-variant',        hexFromArgb(theme.palettes.neutralVariant.tone(isDark ? 80 : 40)));
+    const _nvHex = hexFromArgb(theme.palettes.neutralVariant.tone(isDark ? 80 : 40));
+    const _nvR = parseInt(_nvHex.slice(1,3), 16);
+    const _nvG = parseInt(_nvHex.slice(3,5), 16);
+    const _nvB = parseInt(_nvHex.slice(5,7), 16);
+    root.style.setProperty('--m3-segmented-bg',           `rgba(${_nvR},${_nvG},${_nvB},0.12)`);
     root.style.setProperty('--m3-surface',                hexFromArgb(scheme.surface));
     root.style.setProperty('--m3-on-surface',             hexFromArgb(scheme.onSurface));
     root.style.setProperty('--m3-surface-container',      hexFromArgb(scheme.surfaceVariant));
