@@ -552,3 +552,213 @@ body {
 .m3-export-btn .export-text {
     white-space: nowrap;
 }
+
+/* ─── Palette-list interactive state ──────────────────────────────────────── */
+.palette-list .palette-card .color-indicator,
+.color-picker-card .color-indicator {
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.palette-list .palette-card .color-indicator:hover,
+.color-picker-card .color-indicator:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--m3-primary) 20%, transparent);
+}
+.palette-list .palette-card .color-indicator:active,
+.color-picker-card .color-indicator:active {
+    transform: scale(0.95);
+}
+
+/* ─── HCT Picker ───────────────────────────────────────────────────────────── */
+.hct-picker {
+    position: fixed;
+    z-index: 10000;
+    width: 288px;
+    background: var(--m3-surface);
+    border-radius: 28px;
+    padding: 24px;
+    box-shadow:
+        0 4px 8px 3px rgba(0,0,0,.15),
+        0 1px 3px rgba(0,0,0,.30);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-family: 'Google Sans Flex', system-ui, sans-serif;
+    color: var(--m3-on-surface);
+    opacity: 0;
+    transform: scale(0.92) translateY(-8px);
+    transform-origin: top left;
+    transition:
+        opacity 0.2s cubic-bezier(0.2,0,0,1),
+        transform 0.2s cubic-bezier(0.2,0,0,1);
+    pointer-events: none;
+    user-select: none;
+}
+.hct-picker.open {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    pointer-events: auto;
+}
+
+.hct-picker__header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+}
+.hct-picker__swatch {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 2px solid var(--m3-surface-container);
+    transition: background-color 0.1s ease;
+}
+.hct-picker__title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding-top: 4px;
+}
+.hct-picker__label {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--m3-on-surface);
+    line-height: 1.2;
+}
+.hct-picker__desc {
+    font-size: 12px;
+    color: var(--m3-on-surface-variant);
+}
+
+.hct-picker__hex-row {
+    display: flex;
+    align-items: center;
+    background: var(--m3-surface-container);
+    border-radius: 12px;
+    padding: 0 12px;
+    gap: 8px;
+}
+.hct-picker__hex-row span {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--m3-on-surface-variant);
+    font-family: monospace;
+}
+.hct-picker__hex-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: monospace;
+    font-size: 14px;
+    color: var(--m3-on-surface);
+    padding: 12px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.hct-picker__sliders {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.hct-picker__slider-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.hct-picker__slider-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+.hct-picker__slider-name {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--m3-on-surface-variant);
+}
+.hct-picker__slider-val {
+    font-size: 12px;
+    font-family: monospace;
+    color: var(--m3-on-surface-variant);
+    min-width: 32px;
+    text-align: right;
+}
+.hct-picker__slider-track {
+    position: relative;
+    height: 28px;
+    border-radius: 14px;
+    overflow: visible;
+    cursor: pointer;
+}
+.hct-picker__slider-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 14px;
+}
+.hct-picker__slider-thumb {
+    position: absolute;
+    top: 50%;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: white;
+    border: 2.5px solid rgba(255,255,255,0.9);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    transition: width 0.1s, height 0.1s;
+}
+.hct-picker__slider-track:active .hct-picker__slider-thumb {
+    width: 26px;
+    height: 26px;
+}
+
+.hct-picker__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+.hct-picker__btn {
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+.hct-picker__btn--cancel {
+    background: transparent;
+    color: var(--m3-primary);
+}
+.hct-picker__btn--cancel:hover {
+    background: var(--m3-surface-container);
+}
+.hct-picker__btn--ok {
+    background: var(--m3-primary);
+    color: var(--m3-on-primary);
+}
+.hct-picker__btn--ok:hover {
+    filter: brightness(1.08);
+}
+
+.hct-picker-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: transparent;
+}
+
+.hct-picker__warning {
+    font-size: 11px;
+    line-height: 1.5;
+    color: var(--m3-error, #B3261E);
+    background: color-mix(in srgb, var(--m3-error, #B3261E) 12%, transparent);
+    border-radius: 8px;
+    padding: 8px 12px;
+}

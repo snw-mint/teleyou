@@ -1,4 +1,7 @@
 import { sourceColorFromImage, themeFromSourceColor, hexFromArgb, argbFromHex, Hct, Blend, TonalPalette } from '@material/material-color-utilities';
+import { generateMobileTheme, downloadAttheme } from './theme-mobile.js';
+import { generateDesktopColors, downloadDesktopTheme } from './theme-desktop.js';
+import { createHctPicker } from './hct-picker.js';
 let currentExtractedTheme = null;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -40,6 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const uploadTriggerBtn = document.getElementById('upload-trigger-btn');
     const imageUploadInput = document.getElementById('image-upload-input');
     const randomizeColorBtn = document.querySelector('.color-picker-card .small-btn');
+    const exportMobileBtn = document.getElementById('export-mobile-btn');
+    const exportPcBtn = document.getElementById('export-pc-btn');
 
     wallItems.forEach(w => w.classList.remove('active'));
 
@@ -122,6 +127,32 @@ document.addEventListener('DOMContentLoaded', () => {
         applyMaterialThemeToUI(currentExtractedTheme);
     });
 
+    if (exportMobileBtn) {
+        exportMobileBtn.addEventListener('click', () => {
+            const theme = getThemeForExport();
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            const scheme = isDark ? theme.schemes.dark : theme.schemes.light;
+            const fileContent = generateMobileTheme(scheme, isDark);
+            downloadAttheme(fileContent, `TeleYou-${isDark ? 'dark' : 'light'}.attheme`);
+        });
+    }
+
+    if (exportPcBtn) {
+        exportPcBtn.addEventListener('click', async () => {
+            const theme = getThemeForExport();
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            const scheme = isDark ? theme.schemes.dark : theme.schemes.light;
+            const colors = generateDesktopColors(scheme);
+            const wallpaperBlob = await getActiveWallpaperBlob(wallItems, uploadTriggerBtn);
+
+            await downloadDesktopTheme(
+                colors,
+                wallpaperBlob,
+                `TeleYou-${isDark ? 'dark' : 'light'}.tdesktop-theme`
+            );
+        });
+    }
+
     const tooltipElement = document.getElementById('m3-tooltip');
     const tooltipTriggers = document.querySelectorAll('[data-tooltip]');
 
@@ -154,118 +185,94 @@ document.addEventListener('DOMContentLoaded', () => {
         trigger.addEventListener('focus', showTooltip);
         trigger.addEventListener('blur', hideTooltip);
     });
-// ==========================================
-    // COMPILADOR DE TEMAS: TELEGRAM MOBILE
-    // ==========================================
 
-    const exportMobileBtn = document.getElementById('export-mobile-btn');
+    // ── HCT Picker for palette-list ──────────────────────────────────────────
+    const PALETTE_ROLES = [
+        { cssVar: '--m3-primary',         label: 'Primary',         description: 'Key actions & highlights',      constraintRole: 'primary'       },
+        { cssVar: '--m3-secondary',        label: 'Secondary',       description: 'Supporting elements',           constraintRole: 'secondary'     },
+        { cssVar: '--m3-tertiary',         label: 'Tertiary',        description: 'Complementary accents',         constraintRole: 'tertiary'      },
+        { cssVar: '--m3-error',            label: 'Error',           description: 'Errors & warnings',             constraintRole: 'error'         },
+        { cssVar: '--m3-neutral',          label: 'Neutral',         description: 'Outlines & dividers',           constraintRole: 'neutral'       },
+        { cssVar: '--m3-neutral-variant',  label: 'Neutral Variant', description: 'Subtle secondary elements',     constraintRole: 'neutralVariant'},
+    ];
 
-    // 1. COLE O CONTEÚDO DOS ARQUIVOS AQUI DENTRO DAS CRASES
-    const telemoneDarkTemplate = `COLE_O_CONTEUDO_DO_defaultDarkFile.attheme_AQUI`;
-    
-    const telemoneLightTemplate = `COLE_O_CONTEUDO_DO_defaultLightFile.attheme_AQUI`;
+    let activePaletteRole = null;
 
-    // 2. Dicionário de Fallbacks extraído do ThemeRepository.kt do Telemone
-    const telemoneFallbacks = {
-        "chat_inAdminText": "chat_inTimeText", "chat_inAdminSelectedText": "chat_inTimeSelectedText", "player_progressCachedBackground": "player_progressBackground", "chat_inAudioCacheSeekbar": "chat_inAudioSeekbar", "chat_outAudioCacheSeekbar": "chat_outAudioSeekbar", "chat_emojiSearchBackground": "chat_emojiPanelStickerPackSelector", "location_sendLiveLocationIcon": "location_sendLocationIcon", "changephoneinfo_image2": "featuredStickers_addButton", "graySectionText": "windowBackgroundWhiteGrayText2", "chat_inMediaIcon": "chat_inBubble", "chat_outMediaIcon": "chat_outBubble", "chat_inMediaIconSelected": "chat_inBubbleSelected", "chat_outMediaIconSelected": "chat_outBubbleSelected", "chats_actionUnreadIcon": "profile_actionIcon", "chats_actionUnreadBackground": "profile_actionBackground", "chats_actionUnreadPressedBackground": "profile_actionPressedBackground", "dialog_inlineProgressBackground": "windowBackgroundGray", "dialog_inlineProgress": "chats_menuItemIcon", "groupcreate_spanDelete": "chats_actionIcon", "sharedMedia_photoPlaceholder": "windowBackgroundGray", "chat_attachPollBackground": "chat_attachAudioBackground", "chat_attachPollIcon": "chat_attachAudioIcon", "chats_onlineCircle": "windowBackgroundWhiteBlueText", "windowBackgroundWhiteBlueButton": "windowBackgroundWhiteValueText", "windowBackgroundWhiteBlueIcon": "windowBackgroundWhiteValueText", "undo_background": "chat_gifSaveHintBackground", "undo_cancelColor": "chat_gifSaveHintText", "undo_infoColor": "chat_gifSaveHintText", "windowBackgroundUnchecked": "windowBackgroundWhite", "windowBackgroundChecked": "windowBackgroundWhite", "switchTrackBlue": "switchTrack", "switchTrackBlueChecked": "switchTrackChecked", "switchTrackBlueThumb": "windowBackgroundWhite", "switchTrackBlueThumbChecked": "windowBackgroundWhite", "windowBackgroundCheckText": "windowBackgroundWhite", "contextProgressInner4": "contextProgressInner1", "contextProgressOuter4": "contextProgressOuter1", "switchTrackBlueSelector": "listSelector", "switchTrackBlueSelectorChecked": "listSelector", "chat_emojiBottomPanelIcon": "chat_emojiPanelIcon", "chat_emojiSearchIcon": "chat_emojiPanelIcon", "chat_emojiPanelStickerSetNameHighlight": "windowBackgroundWhiteBlueText4", "chat_emojiPanelStickerPackSelectorLine": "chat_emojiPanelIconSelected", "sharedMedia_actionMode": "actionBarDefault", "sheet_scrollUp": "chat_emojiPanelStickerPackSelector", "sheet_other": "player_actionBarItems", "dialogSearchBackground": "chat_emojiPanelStickerPackSelector", "dialogSearchHint": "chat_emojiPanelIcon", "dialogSearchIcon": "chat_emojiPanelIcon", "dialogSearchText": "windowBackgroundWhiteBlackText", "dialogFloatingButtonPressed": "dialogRoundCheckBox", "dialogFloatingIcon": "dialogRoundCheckBoxCheck", "dialogShadowLine": "chat_emojiPanelShadowLine", "chat_emojiPanelIconSelector": "listSelector", "actionBarDefaultArchived": "actionBarDefault", "actionBarDefaultArchivedSelector": "actionBarDefaultSelector", "actionBarDefaultArchivedIcon": "actionBarDefaultIcon", "actionBarDefaultArchivedTitle": "actionBarDefaultTitle", "actionBarDefaultArchivedSearch": "actionBarDefaultSearch", "actionBarDefaultArchivedSearchPlaceholder": "actionBarDefaultSearchPlaceholder", "chats_message_threeLines": "chats_message", "chats_nameMessage_threeLines": "chats_nameMessage", "chats_nameArchived": "chats_name", "chats_nameMessageArchived": "chats_nameMessage", "chats_nameMessageArchived_threeLines": "chats_nameMessage", "chats_messageArchived": "chats_message", "avatar_backgroundArchived": "chats_unreadCounterMuted", "chats_archiveBackground": "chats_actionBackground", "chats_archivePinBackground": "chats_unreadCounterMuted", "chats_archiveIcon": "chats_actionIcon", "chats_archiveText": "chats_actionIcon", "actionBarDefaultSubmenuItemIcon": "dialogIcon", "checkboxDisabled": "chats_unreadCounterMuted", "chat_status": "actionBarDefaultSubtitle", "chat_inGreenCall": "calls_callReceivedGreenIcon", "chat_inRedCall": "calls_callReceivedRedIcon", "chat_outGreenCall": "calls_callReceivedGreenIcon", "actionBarTabActiveText": "actionBarDefaultTitle", "actionBarTabUnactiveText": "actionBarDefaultSubtitle", "actionBarTabLine": "actionBarDefaultTitle", "actionBarTabSelector": "actionBarDefaultSelector", "profile_status": "avatar_subtitleInProfileBlue", "chats_menuTopBackgroundCats": "avatar_backgroundActionBarBlue", "chat_outLinkSelectBackground": "chat_linkSelectBackground", "actionBarDefaultSubmenuSeparator": "windowBackgroundGray", "chat_attachPermissionImage": "dialogTextBlack", "chat_attachPermissionMark": "chat_sentError", "chat_attachPermissionText": "dialogTextBlack", "chat_attachEmptyImage": "emptyListPlaceholder", "actionBarBrowser": "actionBarDefault", "chats_sentReadCheck": "chats_sentCheck", "chat_outSentCheckRead": "chat_outSentCheck", "chat_outSentCheckReadSelected": "chat_outSentCheckSelected", "chats_archivePullDownBackground": "chats_unreadCounterMuted", "chats_archivePullDownBackgroundActive": "chats_actionBackground", "avatar_backgroundArchivedHidden": "avatar_backgroundSaved", "featuredStickers_removeButtonText": "featuredStickers_addButtonPressed", "dialogEmptyImage": "player_time", "dialogEmptyText": "player_time", "location_actionIcon": "dialogTextBlack", "location_actionActiveIcon": "windowBackgroundWhiteBlueText7", "location_actionBackground": "dialogBackground", "location_actionPressedBackground": "dialogBackgroundGray", "location_sendLocationText": "windowBackgroundWhiteBlueText7", "location_sendLiveLocationText": "windowBackgroundWhiteGreenText", "chat_outTextSelectionHighlight": "chat_textSelectBackground", "chat_inTextSelectionHighlight": "chat_textSelectBackground", "chat_TextSelectionCursor": "chat_messagePanelCursor", "chat_outTextSelectionCursor": "chat_TextSelectionCursor", "chat_inPollCorrectAnswer": "chat_attachLocationBackground", "chat_outPollCorrectAnswer": "chat_attachLocationBackground", "chat_inPollWrongAnswer": "chat_attachAudioBackground", "chat_outPollWrongAnswer": "chat_attachAudioBackground", "windowBackgroundWhiteYellowText": "avatar_nameInMessageOrange", "profile_tabText": "windowBackgroundWhiteGrayText", "profile_tabSelectedText": "windowBackgroundWhiteBlueHeader", "profile_tabSelectedLine": "windowBackgroundWhiteBlueHeader", "profile_tabSelector": "listSelector", "statisticChartPopupBackground": "dialogBackground", "chat_attachGalleryText": "chat_attachGalleryBackground", "chat_attachAudioText": "chat_attachAudioBackground", "chat_attachFileText": "chat_attachFileBackground", "chat_attachContactText": "chat_attachContactBackground", "chat_attachLocationText": "chat_attachLocationBackground", "chat_attachPollText": "chat_attachPollBackground", "chat_inPsaNameText": "avatar_nameInMessageGreen", "chat_outPsaNameText": "avatar_nameInMessageGreen", "chat_outAdminText": "chat_outTimeText", "chat_outAdminSelectedText": "chat_outTimeSelectedText", "returnToCallMutedBackground": "windowBackgroundWhite", "dialogSwipeRemove": "avatar_backgroundRed", "chat_inReactionButtonBackground": "chat_inLoader", "chat_outReactionButtonBackground": "chat_outLoader", "chat_inReactionButtonText": "chat_inPreviewInstantText", "chat_outReactionButtonText": "chat_outPreviewInstantText", "chat_inReactionButtonTextSelected": "windowBackgroundWhite", "chat_outReactionButtonTextSelected": "windowBackgroundWhite", "dialogReactionMentionBackground": "voipgroup_mutedByAdminGradient2", "topics_unreadCounter": "chats_unreadCounter", "topics_unreadCounterMuted": "chats_message", "avatar_background2Saved": "avatar_backgroundSaved", "avatar_background2Red": "avatar_backgroundRed", "avatar_background2Orange": "avatar_backgroundOrange", "avatar_background2Violet": "avatar_backgroundViolet", "avatar_background2Green": "avatar_backgroundGreen", "avatar_background2Cyan": "avatar_backgroundCyan", "avatar_background2Blue": "avatar_backgroundBlue", "avatar_background2Pink": "avatar_backgroundPink", "statisticChartLine_orange": "color_orange", "statisticChartLine_blue": "color_blue", "statisticChartLine_red": "color_red", "statisticChartLine_lightblue": "color_lightblue", "statisticChartLine_golden": "color_yellow", "statisticChartLine_purple": "color_purple", "statisticChartLine_indigo": "color_purple", "statisticChartLine_cyan": "color_cyan"
-    };
-
-    exportMobileBtn.addEventListener('click', () => {
-        if (!currentExtractedTheme) {
-            alert('Selecione um papel de parede primeiro!');
-            return;
-        }
-
-        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        const palettes = currentExtractedTheme.palettes;
-        const sourceColor = currentExtractedTheme.source; // Semente para harmonização
-
-        // O Telegram exige Signed 32-bit Integers para as cores
-        const toSigned32 = (argb) => (argb | 0).toString();
-
-        // Cores base do Kotlin do Telemone para mesclagem de tons secundários
-        const customBases = {
-            blue: '#0000FF', red: '#FF0000', green: '#00FF00',
-            orange: '#FFAA00', violet: '#EB00FF', pink: '#FF32AC', cyan: '#14AAAC'
-        };
-
-        // O COMPILADOR DE TOKENS
-        const resolveToken = (token) => {
-            if (!token || token === 'transparent') return '0';
-            if (token === 'white') return toSigned32(0xFFFFFFFF);
-            if (token === 'black') return toSigned32(0xFF000000);
-
-            // 1. Processa Roles do tipo: "surface_container_dark" ou "on_primary_light"
-            const roleMatch = token.match(/^(.*)_(dark|light)$/);
-            if (roleMatch) {
-                // Converte snake_case para camelCase (ex: surface_container -> surfaceContainer)
-                let roleName = roleMatch[1].replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
-                const targetScheme = roleMatch[2] === 'dark' ? currentExtractedTheme.schemes.dark : currentExtractedTheme.schemes.light;
-                if (targetScheme[roleName] !== undefined) return toSigned32(targetScheme[roleName]);
+    const hctPicker = createHctPicker({
+        onchange(argb) {
+            if (!activePaletteRole) return;
+            if (activePaletteRole.cssVar) {
+                document.documentElement.style.setProperty(activePaletteRole.cssVar, hexFromArgb(argb));
+            } else {
+                // Source color — rebuild the full theme live
+                currentExtractedTheme = themeFromSourceColor(argb);
+                applyMaterialThemeToUI(currentExtractedTheme);
             }
-
-            // 2. Processa Tones exatos: "primary_50", "neutral_variant_20", "cyan_80"
-            const toneMatch = token.match(/^(.*)_(\d+)$/);
-            if (toneMatch) {
-                let paletteName = toneMatch[1].replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
-                const toneValue = parseInt(toneMatch[2], 10);
-
-                if (palettes[paletteName]) {
-                    return toSigned32(palettes[paletteName].tone(toneValue));
-                } else if (customBases[paletteName]) {
-                    // Reproduz a harmonização exata do Palette.kt do Telemone
-                    const baseArgb = argbFromHex(customBases[paletteName]);
-                    const harmonized = Blend.harmonize(baseArgb, sourceColor);
-                    return toSigned32(TonalPalette.fromInt(harmonized).tone(toneValue));
-                }
+        },
+        onclose(argb) {
+            if (!activePaletteRole) return;
+            if (activePaletteRole.cssVar) {
+                document.documentElement.style.setProperty(activePaletteRole.cssVar, hexFromArgb(argb));
+            } else {
+                currentExtractedTheme = themeFromSourceColor(argb);
+                applyMaterialThemeToUI(currentExtractedTheme);
             }
-            
-            console.warn("Ignorado pelo Compilador:", token);
-            return '0';
-        };
-
-        // Extrai linha por linha do Template
-        const templateString = isDark ? telemoneDarkTemplate : telemoneLightTemplate;
-        const parsedTheme = {};
-
-        templateString.split('\n').forEach(line => {
-            if (!line || !line.includes('=')) return;
-            
-            // Remove lixo de formatação como 
-            const cleanLine = line.replace(/\[.*?\]\s*/, '').trim();
-            const [key, token] = cleanLine.split('=');
-            if (key && token) parsedTheme[key] = resolveToken(token);
-        });
-
-        // Aplica os Fallbacks (Se uma variável faltar, copia o valor da sua correspondente)
-        for (const [source, target] of Object.entries(telemoneFallbacks)) {
-            if (parsedTheme[target] !== undefined && parsedTheme[source] === undefined) {
-                parsedTheme[source] = parsedTheme[target];
-            }
-        }
-
-        // Reconstrói o arquivo TDesktop
-        let themeContent = '';
-        for (const [key, value] of Object.entries(parsedTheme)) {
-            themeContent += `${key}=${value}\n`;
-        }
-
-        // Exportação Nativa
-        const blob = new Blob([themeContent], { type: 'application/octet-stream' });
-        const url = URL.createObjectURL(blob);
-        const modeName = isDark ? 'Dark' : 'Light';
-        const a = document.createElement('a');
-        
-        a.href = url;
-        a.download = `FluentYou_${modeName}.attheme`;
-        document.body.appendChild(a);
-        a.click();
-        
-        setTimeout(() => {
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
-        }, 0);
+        },
     });
+
+    document.querySelectorAll('.palette-list .palette-card').forEach((card, i) => {
+        const role = PALETTE_ROLES[i];
+        if (!role) return;
+        const dot = card.querySelector('.color-indicator');
+        if (!dot) return;
+        dot.setAttribute('role', 'button');
+        dot.setAttribute('tabindex', '0');
+        dot.setAttribute('aria-label', `Edit ${role.label} color`);
+
+        function openPickerForRole() {
+            const currentHex = getComputedStyle(document.documentElement)
+                .getPropertyValue(role.cssVar).trim() || '#65558F';
+            const argb = argbFromHex(currentHex.startsWith('#') ? currentHex : '#' + currentHex);
+            activePaletteRole = role;
+            hctPicker.setRole(role.constraintRole);
+            hctPicker.setLabel(role.label, role.description);
+            hctPicker.open(argb, dot);
+        }
+
+        dot.addEventListener('click', openPickerForRole);
+        dot.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                openPickerForRole();
+            }
+        });
+    });
+
+    // ── HCT Picker for source color circle ───────────────────────────────────
+    const sourceColorDot = document.querySelector('.color-picker-card .color-indicator');
+    if (sourceColorDot) {
+        sourceColorDot.setAttribute('role', 'button');
+        sourceColorDot.setAttribute('tabindex', '0');
+        sourceColorDot.setAttribute('aria-label', 'Edit source color');
+
+        function openPickerForSource() {
+            const currentHex = getComputedStyle(document.documentElement)
+                .getPropertyValue('--m3-primary').trim() || '#65558F';
+            const argb = argbFromHex(currentHex.startsWith('#') ? currentHex : '#' + currentHex);
+            activePaletteRole = { cssVar: null, label: 'Source Color', description: 'Seed for the entire palette' };
+            hctPicker.setRole('primary');
+            hctPicker.setLabel('Source Color', 'Seed for the entire palette');
+            hctPicker.open(argb, sourceColorDot);
+        }
+
+        sourceColorDot.addEventListener('click', openPickerForSource);
+        sourceColorDot.addEventListener('keydown', e => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                openPickerForSource();
+            }
+        });
+    }
 });
 async function extractThemeFromImage(imageUrl) {
     const imgElement = new Image();
@@ -315,8 +322,8 @@ function applyMaterialThemeToUI(theme) {
     root.style.setProperty('--m3-secondary', hexFromArgb(scheme.secondary));
     root.style.setProperty('--m3-tertiary', hexFromArgb(scheme.tertiary));
     root.style.setProperty('--m3-error', hexFromArgb(scheme.error));
-    root.style.setProperty('--m3-neutral', hexFromArgb(scheme.outline));
-    root.style.setProperty('--m3-neutral-variant', hexFromArgb(scheme.outlineVariant));
+    root.style.setProperty('--m3-neutral', hexFromArgb(theme.palettes.neutral.tone(isDark ? 80 : 40)));
+    root.style.setProperty('--m3-neutral-variant', hexFromArgb(theme.palettes.neutralVariant.tone(isDark ? 80 : 40)));
     root.style.setProperty('--m3-surface', hexFromArgb(scheme.surface));
     root.style.setProperty('--m3-on-surface', hexFromArgb(scheme.onSurface));
     root.style.setProperty('--m3-surface-container', hexFromArgb(scheme.surfaceVariant));
@@ -337,4 +344,87 @@ function applyMaterialThemeToUI(theme) {
         colorHex.textContent = primaryHex.toUpperCase();
     }
 
+    updateDynamicFavicon(
+        hexFromArgb(scheme.primaryContainer),
+        hexFromArgb(scheme.onPrimaryContainer)
+    );
+
+}
+
+function getThemeForExport() {
+    if (currentExtractedTheme) {
+        return currentExtractedTheme;
+    }
+
+    const primaryHex = getComputedStyle(document.documentElement)
+        .getPropertyValue('--m3-primary')
+        .trim() || '#65558F';
+
+    currentExtractedTheme = themeFromSourceColor(argbFromHex(primaryHex));
+    return currentExtractedTheme;
+}
+
+// src/js/main.js
+
+/**
+ * Gera um favicon SVG dinâmico mantendo o desenho e o container originais.
+ * @param {string} bgHex - A cor de fundo (primaryContainer).
+ * @param {string} iconHex - A cor do ícone (onPrimaryContainer).
+ */
+function updateDynamicFavicon(bgHex, iconHex) {
+    const faviconTag = document.getElementById('dynamic-favicon');
+    if (!faviconTag) return;
+
+    const iconScale = 28 / 48;
+    const iconOffset = (192 - (192 * iconScale)) / 2;
+
+    const svgString = `<svg viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg" fill="none">
+        <rect width="192" height="192" rx="56" fill="${bgHex}" />
+        <g transform="translate(${iconOffset} ${iconOffset}) scale(${iconScale})">
+            <path stroke="${iconHex}" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" d="M23.073 88.132s65.458-26.782 88.16-36.212c8.702-3.772 38.215-15.843 38.215-15.843s13.621-5.28 12.486 7.544c-.379 5.281-3.406 23.764-6.433 43.756-4.54 28.291-9.459 59.221-9.459 59.221s-.756 8.676-7.188 10.185c-6.433 1.509-17.027-5.281-18.919-6.79-1.513-1.132-28.377-18.106-38.214-26.404-2.649-2.263-5.676-6.79.378-12.071 13.621-12.447 29.891-27.913 39.728-37.72 4.54-4.527 9.081-15.089-9.837-2.264-26.864 18.483-53.35 35.835-53.35 35.835s-6.053 3.772-17.404.377c-11.351-3.395-24.594-7.921-24.594-7.921s-9.08-5.659 6.433-11.693Z"></path>
+        </g>
+    </svg>`;
+    const svgUrl = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgString);
+
+    faviconTag.type = 'image/svg+xml';
+    faviconTag.href = svgUrl;
+
+    const shortcutFavicon = document.querySelector('link[rel="shortcut icon"]');
+    if (shortcutFavicon) {
+        shortcutFavicon.href = svgUrl;
+        shortcutFavicon.type = 'image/svg+xml';
+    }
+}
+
+async function getActiveWallpaperBlob(wallItems, uploadTriggerBtn) {
+    const activePreset = Array.from(wallItems).find(item => item.classList.contains('active'));
+    const activeUpload = uploadTriggerBtn.classList.contains('active') ? uploadTriggerBtn : null;
+    const sourceElement = activeUpload || activePreset;
+
+    if (!sourceElement) {
+        return null;
+    }
+
+    const bgImage = window.getComputedStyle(sourceElement).backgroundImage;
+    const wallpaperUrl = extractUrlFromBackgroundImage(bgImage);
+    if (!wallpaperUrl) {
+        return null;
+    }
+
+    try {
+        const response = await fetch(wallpaperUrl);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch wallpaper: ${response.status}`);
+        }
+
+        return await response.blob();
+    } catch (error) {
+        console.error('Desktop wallpaper export failed:', error);
+        return null;
+    }
+}
+
+function extractUrlFromBackgroundImage(backgroundImage) {
+    const match = backgroundImage.match(/^url\((['"]?)(.*?)\1\)$/);
+    return match ? match[2] : null;
 }
