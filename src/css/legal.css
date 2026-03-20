@@ -1,0 +1,80 @@
+/* ─── legal.css — compartilhado entre privacy.html e terms.html ────────── */
+
+body { overflow: auto; }
+
+.legal-content {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 40px 32px 64px;
+}
+.legal-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--m3-primary);
+    text-decoration: none;
+    margin-bottom: 36px;
+    transition: opacity 0.15s ease, color var(--transition-speed) ease;
+}
+.legal-back:hover { opacity: 0.75; }
+.legal-back svg { width: 18px; height: 18px; }
+
+.legal-title {
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--m3-on-surface);
+    margin: 0 0 8px;
+    transition: color var(--transition-speed) ease;
+}
+.legal-date {
+    font-size: 13px;
+    color: var(--m3-on-surface-variant);
+    margin: 0 0 40px;
+    transition: color var(--transition-speed) ease;
+}
+.legal-section { margin-bottom: 32px; }
+.legal-section h2 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--m3-on-surface);
+    margin: 0 0 10px;
+    transition: color var(--transition-speed) ease;
+}
+.legal-section p {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--m3-on-surface-variant);
+    margin: 0;
+    transition: color var(--transition-speed) ease;
+}
+.legal-section a {
+    color: var(--m3-primary);
+    text-decoration: none;
+    transition: opacity 0.15s ease;
+}
+.legal-section a:hover { opacity: 0.75; }
+
+.legal-mit {
+    background: var(--m3-surface-container);
+    border-radius: 16px;
+    padding: 20px 24px;
+    font-size: 12px;
+    line-height: 1.8;
+    color: var(--m3-on-surface-variant);
+    font-family: monospace;
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin: 12px 0 0;
+    transition: background-color var(--transition-speed) ease,
+                color var(--transition-speed) ease;
+}
+
+@media (max-width: 768px) {
+    .legal-content { padding: 32px 20px 48px; }
+    .legal-title { font-size: 24px; }
+}
+@media (max-width: 390px) {
+    .legal-content { padding: 24px 16px 40px; }
+}

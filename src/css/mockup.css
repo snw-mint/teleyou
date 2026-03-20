@@ -40,7 +40,7 @@
   --tg-unread-bg:              var(--m3-primary-container);
   --tg-unread-fg:              var(--m3-on-surface);
 }
-   ─────────────────────────────────────────────────────────────────── */
+
 .mockup-scope .device-screen {
   background-color: var(--tg-background);
   border-radius: 8px;
