@@ -2,6 +2,7 @@ import { sourceColorFromImage, themeFromSourceColor, hexFromArgb, argbFromHex, H
 import { generateMobileTheme, downloadAttheme } from './theme-mobile.js';
 import { generateDesktopColors, downloadDesktopTheme } from './theme-desktop.js';
 import { createHctPicker } from './hct-picker.js';
+import { createExportModal } from './export-modal.js';
 let currentExtractedTheme = null;
 let currentWallpaperUrl = null;
 
@@ -44,8 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const uploadTriggerBtn = document.getElementById('upload-trigger-btn');
     const imageUploadInput = document.getElementById('image-upload-input');
     const randomizeColorBtn = document.querySelector('.color-picker-card .small-btn');
-    const exportMobileBtn = document.getElementById('export-mobile-btn');
-    const exportPcBtn = document.getElementById('export-pc-btn');
+    const exportMobileBtn = null; // replaced by export modal
+    const exportPcBtn = null;     // replaced by export modal
 
     wallItems.forEach(w => w.classList.remove('active'));
 
@@ -131,31 +132,16 @@ document.addEventListener('DOMContentLoaded', () => {
         applyMaterialThemeToUI(currentExtractedTheme);
     });
 
-    if (exportMobileBtn) {
-        exportMobileBtn.addEventListener('click', () => {
-            const theme = getThemeForExport();
-            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-            const scheme = isDark ? theme.schemes.dark : theme.schemes.light;
-            const fileContent = generateMobileTheme(scheme, isDark);
-            downloadAttheme(fileContent, `TeleYou-${isDark ? 'dark' : 'light'}.attheme`);
-        });
-    }
-
-    if (exportPcBtn) {
-        exportPcBtn.addEventListener('click', async () => {
-            const theme = getThemeForExport();
-            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-            const scheme = isDark ? theme.schemes.dark : theme.schemes.light;
-            const colors = generateDesktopColors(scheme);
-            const wallpaperBlob = await getActiveWallpaperBlob(wallItems, uploadTriggerBtn);
-
-            await downloadDesktopTheme(
-                colors,
-                wallpaperBlob,
-                `TeleYou-${isDark ? 'dark' : 'light'}.tdesktop-theme`
-            );
-        });
-    }
+    const exportModal = createExportModal({
+        getTheme:         getThemeForExport,
+        getWallpaperBlob: () => getActiveWallpaperBlob(wallItems, uploadTriggerBtn),
+        generateMobile:   generateMobileTheme,
+        downloadAttheme:  downloadAttheme,
+        generateDesktop:  generateDesktopColors,
+        downloadDesktop:  downloadDesktopTheme,
+    });
+    const fab = document.getElementById('m3-export-fab');
+    if (fab) fab.addEventListener('click', () => exportModal.open());
 
     const tooltipElement = document.getElementById('m3-tooltip');
     const tooltipTriggers = document.querySelectorAll('[data-tooltip]');
