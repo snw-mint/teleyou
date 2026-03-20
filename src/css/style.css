@@ -421,7 +421,7 @@ body {
     background-color: var(--m3-segmented-bg, color-mix(in srgb, var(--m3-neutral-variant) 12%, transparent));
     border-radius: 100px;
     display: inline-flex;
-    padding: 10px;
+    padding: 5px 10px 5px 10px;
     gap: 15px;
     transition: background-color var(--transition-speed) ease;
 }
@@ -429,8 +429,8 @@ body {
     border: none;
     background: none;
     color: var(--m3-on-tertiary-container);
-    width: 60px; 
-    height: 60px; 
+    width: 45px; 
+    height: 45px; 
     border-radius: 50%;
     cursor: pointer;
     position: relative;
@@ -449,7 +449,7 @@ body {
     pointer-events: none;
 }
 .segment-item .material-symbols-rounded {
-    font-size: 28px;
+    font-size: 20px;
     position: relative;
     z-index: 1;
 }
@@ -464,7 +464,7 @@ body {
     grid-template-areas: "mockup";
     width: 100%;
     flex: 1;
-    place-items: center;
+    place-items: start center;
     position: relative;
 }
 .mockup-view {

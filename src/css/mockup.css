@@ -58,7 +58,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 18px 4px;
-  background: transparent;
+  background: var(--tg-background);
   color: var(--tg-on-surface);
   font-size: 13px;
   font-weight: 600;
@@ -80,7 +80,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 8px 8px 8px 16px;
-  color: var(--tg-on-surface);
+  background: var(--tg-background);
   flex-shrink: 0;
   box-shadow: 0 1px 0 0 color-mix(in srgb, var(--tg-outline-variant) 50%, transparent);
 }

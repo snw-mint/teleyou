@@ -275,6 +275,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Apply default source color on load so mockups are never blank
+    const DEFAULT_SOURCE = '#6750A4';
+    currentExtractedTheme = themeFromSourceColor(argbFromHex(DEFAULT_SOURCE));
+    applyMaterialThemeToUI(currentExtractedTheme);
 });
 async function extractThemeFromImage(imageUrl) {
     const imgElement = new Image();
