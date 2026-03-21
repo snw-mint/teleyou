@@ -18,8 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeBtn = document.getElementById('theme-toggle');
     const iconSun = document.querySelector('.icon-sun');
     const iconMoon = document.querySelector('.icon-moon');
-    
-
     themeBtn.addEventListener('click', () => {
         const rootElement = document.documentElement;
         const isDark = rootElement.getAttribute('data-theme') === 'dark';
@@ -142,6 +140,26 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     const fab = document.getElementById('m3-export-fab');
     if (fab) fab.addEventListener('click', () => exportModal.open());
+
+    const infoBtn = document.getElementById('info-btn');
+    if (infoBtn) {
+        const infoScrim = document.getElementById('m3-info-modal-scrim');
+        const infoClose = document.getElementById('m3-info-modal-close');
+
+        function openInfoModal() {
+            infoScrim.classList.add('open');
+            document.addEventListener('keydown', onInfoKeyDown);
+        }
+        function closeInfoModal() {
+            infoScrim.classList.remove('open');
+            document.removeEventListener('keydown', onInfoKeyDown);
+        }
+        function onInfoKeyDown(e) { if (e.key === 'Escape') closeInfoModal(); }
+
+        infoBtn.addEventListener('click', openInfoModal);
+        infoClose.addEventListener('click', closeInfoModal);
+        infoScrim.addEventListener('click', e => { if (e.target === infoScrim) closeInfoModal(); });
+    }
 
     const tooltipElement = document.getElementById('m3-tooltip');
     const tooltipTriggers = document.querySelectorAll('[data-tooltip]');
