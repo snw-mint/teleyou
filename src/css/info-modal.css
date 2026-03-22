@@ -11,8 +11,10 @@
     transition: background 0.25s ease;
 }
 .m3-info-modal-scrim.open {
-    background: rgba(0,0,0,0.40);
+    background: rgba(0,0,0,0.5);
     pointer-events: auto;
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
 }
 
 .m3-info-modal {
@@ -160,7 +162,7 @@
 
 /* Card base */
 .m3-info-card {
-    background-color: var(--m3-surface-container);
+    background-color: color-mix(in srgb, var(--m3-primary) 10%, var(--m3-surface));
     border-radius: 20px;
     overflow: hidden;
     transition: background-color var(--transition-speed) ease;
@@ -278,7 +280,7 @@
     padding: 12px 16px;
     font-size: 12px;
     color: var(--m3-on-surface-variant);
-    background-color: var(--m3-surface-container);
+    background-color: color-mix(in srgb, var(--m3-primary) 10%, var(--m3-surface));
     border-radius: 20px;
     transition: color var(--transition-speed) ease, background-color var(--transition-speed) ease;
 }

@@ -148,7 +148,6 @@
   margin: 0 16px;
   background: color-mix(in srgb, var(--tg-on-surface) 8%, transparent);
 }
- 
 
 .avatar {
   width: 50px;
@@ -411,9 +410,9 @@
 }
 
 
-/* ─── Adicionar ao final do mockup.css existente ────────────────────────── */
 
-/* chat-screen: suporte a wallpaper de fundo */
+
+
 .chat-screen {
     background-color: var(--tg-background);
     background-size: cover;
@@ -424,7 +423,7 @@
     position: relative;
 }
 
-/* topbar mobile */
+
 .chat-topbar {
     display: flex;
     align-items: center;
@@ -487,7 +486,7 @@
     color: var(--tg-primary);
 }
 
-/* topbar desktop */
+
 .chat-mock-topbar {
     display: flex;
     align-items: center;
@@ -514,7 +513,7 @@
     line-height: 1.2;
 }
 
-/* messages area */
+
 .messages-area {
     flex: 1;
     min-height: 0;
@@ -546,7 +545,7 @@
 .msg-in  { align-self: flex-start; }
 .msg-out { align-self: flex-end; }
 
-/* bubbles */
+
 .bubble {
     padding: 7px 10px 5px;
     border-radius: 16px;
@@ -590,11 +589,11 @@
 .bubble-check--read {
     color: var(--tg-primary);
     opacity: 1;
-    /* ligeiramente mais escura que o bubble para contrastar */
+    
     filter: brightness(0.75);
 }
 
-/* ── Desktop bubble overrides ─────────────────────────────────────────────── */
+
 [data-theme="light"] #chat-screen-desktop .bubble-in {
     background: #ffffff;
     color: #000000;
@@ -612,7 +611,7 @@
     opacity: 0.7;
 }
 
-/* ── Mobile bubble overrides ──────────────────────────────────────────────── */
+
 #chat-screen-mobile .bubble-in {
     background: var(--tg-surface-container-low);
     color: var(--tg-on-surface);
@@ -635,7 +634,7 @@
     filter: none;
 }
 
-/* input bar */
+
 .chat-inputbar {
     display: flex;
     align-items: center;
@@ -682,7 +681,7 @@
     opacity: 0.6;
 }
 
-/* status bar na chat screen */
+
 .mockup-scope .chat-status-bar {
     background: var(--tg-surface-container);
     color: var(--tg-on-surface);

@@ -18,33 +18,40 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeBtn = document.getElementById('theme-toggle');
     const iconSun = document.querySelector('.icon-sun');
     const iconMoon = document.querySelector('.icon-moon');
-    themeBtn.addEventListener('click', () => {
-        const rootElement = document.documentElement;
-        const isDark = rootElement.getAttribute('data-theme') === 'dark';
-        
-        if (isDark) {
-            rootElement.setAttribute('data-theme', 'light');
-            iconSun.style.display = 'none';
-            iconMoon.style.display = 'block';
-            themeBtn.setAttribute('data-tooltip', 'Switch to dark theme');
-        } else {
-            rootElement.setAttribute('data-theme', 'dark');
-            iconSun.style.display = 'block';
-            iconMoon.style.display = 'none';
-            themeBtn.setAttribute('data-tooltip', 'Switch to light theme');
-        }
+    const rootElement = document.documentElement;
+
+    const applyTheme = (isDark) => {
+        rootElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+        if (iconSun) iconSun.style.display = isDark ? 'block' : 'none';
+        if (iconMoon) iconMoon.style.display = isDark ? 'none' : 'block';
+        if (themeBtn) themeBtn.setAttribute('data-tooltip', isDark ? 'Switch to light theme' : 'Switch to dark theme');
 
         if (currentExtractedTheme) {
             applyMaterialThemeToUI(currentExtractedTheme);
         }
+    };
+
+    // Set initial theme based on system preference
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    applyTheme(mediaQuery.matches);
+
+    // Listen for system theme changes
+    mediaQuery.addEventListener('change', (e) => {
+        applyTheme(e.matches);
+    });
+
+    // Handle manual theme toggle
+    themeBtn.addEventListener('click', () => {
+        const isCurrentlyDark = rootElement.getAttribute('data-theme') === 'dark';
+        applyTheme(!isCurrentlyDark);
     });
 
     const wallItems = document.querySelectorAll('.wall-item:not(.upload-btn)');
     const uploadTriggerBtn = document.getElementById('upload-trigger-btn');
     const imageUploadInput = document.getElementById('image-upload-input');
     const randomizeColorBtn = document.querySelector('.color-picker-card .small-btn');
-    const exportMobileBtn = null; // replaced by export modal
-    const exportPcBtn = null;     // replaced by export modal
+    const exportMobileBtn = null; 
+    const exportPcBtn = null;     
 
     wallItems.forEach(w => w.classList.remove('active'));
 
@@ -148,10 +155,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function openInfoModal() {
             infoScrim.classList.add('open');
+            document.body.style.overflow = 'hidden';
             document.addEventListener('keydown', onInfoKeyDown);
         }
         function closeInfoModal() {
             infoScrim.classList.remove('open');
+            document.body.style.overflow = '';
             document.removeEventListener('keydown', onInfoKeyDown);
         }
         function onInfoKeyDown(e) { if (e.key === 'Escape') closeInfoModal(); }
@@ -194,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
         trigger.addEventListener('blur', hideTooltip);
     });
 
-    // ── HCT Picker for palette-list ──────────────────────────────────────────
+    
     const PALETTE_ROLES = [
         { cssVar: '--m3-primary',         label: 'Primary',         description: 'Key actions & highlights',      constraintRole: 'primary'       },
         { cssVar: '--m3-secondary',        label: 'Secondary',       description: 'Supporting elements',           constraintRole: 'secondary'     },
@@ -212,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (activePaletteRole.cssVar) {
                 document.documentElement.style.setProperty(activePaletteRole.cssVar, hexFromArgb(argb));
             } else {
-                // Source color — rebuild the full theme live
+                
                 currentExtractedTheme = themeFromSourceColor(argb);
                 applyMaterialThemeToUI(currentExtractedTheme);
             }
@@ -280,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Apply default source color on load so mockups are never blank
+    
     const DEFAULT_SOURCE = '#6750A4';
     currentExtractedTheme = themeFromSourceColor(argbFromHex(DEFAULT_SOURCE));
     applyMaterialThemeToUI(currentExtractedTheme);

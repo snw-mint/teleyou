@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,43 +8,74 @@
     <link rel="icon" id="dynamic-favicon" href="/favicon.png" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./src/css/style.css">
-    <link rel="stylesheet" href="./src/css/footer.css">
-    <link rel="stylesheet" href="./src/css/legal.css">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="./src/css/pages.css">
 </head>
+
 <body>
     <header class="app-header">
         <div class="brand-section">
+            <div class="brand-logo-container">
+                <svg class="brand-logo-bg" viewBox="0 0 380 380" fill="none" xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true">
+                    <path
+                        d="M166.697 39.8458C167.238 39.3157 167.508 39.0506 167.743 38.8298C180.246 27.0567 199.754 27.0567 212.257 38.8298C212.492 39.0506 212.762 39.3157 213.303 39.8458C213.628 40.1639 213.79 40.323 213.945 40.4703C221.945 48.1056 233.282 51.1433 244.028 48.5311C244.235 48.4807 244.456 48.4242 244.896 48.311C245.629 48.1224 245.996 48.0282 246.31 47.9542C263.024 44.0098 279.919 53.7642 284.86 70.2114C284.953 70.5199 285.055 70.8847 285.258 71.6143C285.38 72.0522 285.442 72.2711 285.502 72.4758C288.613 83.0884 296.912 91.3875 307.524 94.4985C307.729 94.5585 307.948 94.6195 308.386 94.7417C309.115 94.9452 309.48 95.0469 309.789 95.1396C326.236 100.081 335.99 116.976 332.046 133.69C331.972 134.004 331.878 134.371 331.689 135.104C331.576 135.544 331.519 135.765 331.469 135.972C328.857 146.718 331.894 158.055 339.53 166.055C339.677 166.21 339.836 166.372 340.154 166.697C340.684 167.238 340.949 167.508 341.17 167.743C352.943 180.246 352.943 199.754 341.17 212.257C340.949 212.492 340.684 212.762 340.154 213.303C339.836 213.628 339.677 213.79 339.53 213.945C331.894 221.945 328.857 233.282 331.469 244.028C331.519 244.235 331.576 244.456 331.689 244.896C331.878 245.629 331.972 245.996 332.046 246.31C335.99 263.024 326.236 279.919 309.789 284.86C309.48 284.953 309.115 285.055 308.386 285.258C307.948 285.381 307.729 285.442 307.524 285.502C296.912 288.613 288.613 296.912 285.502 307.524C285.442 307.729 285.381 307.948 285.258 308.386C285.055 309.115 284.953 309.48 284.86 309.789C279.919 326.236 263.024 335.99 246.31 332.046C245.996 331.972 245.629 331.878 244.896 331.689C244.456 331.576 244.235 331.519 244.028 331.469C233.282 328.857 221.945 331.894 213.945 339.53C213.79 339.677 213.628 339.836 213.303 340.154C212.762 340.684 212.492 340.949 212.257 341.17C199.754 352.943 180.246 352.943 167.743 341.17C167.508 340.949 167.238 340.684 166.697 340.154C166.372 339.836 166.21 339.677 166.055 339.53C158.055 331.894 146.718 328.857 135.972 331.469C135.765 331.519 135.544 331.576 135.104 331.689C134.371 331.878 134.004 331.972 133.69 332.046C116.976 335.99 100.081 326.236 95.1396 309.789C95.0469 309.48 94.9452 309.115 94.7417 308.386C94.6195 307.948 94.5585 307.729 94.4985 307.524C91.3875 296.912 83.0884 288.613 72.4758 285.502C72.2711 285.442 72.0522 285.38 71.6143 285.258C70.8847 285.055 70.5199 284.953 70.2114 284.86C53.7642 279.919 44.0098 263.024 47.9542 246.31C48.0282 245.996 48.1224 245.629 48.311 244.896C48.4242 244.456 48.4807 244.235 48.5311 244.028C51.1433 233.282 48.1056 221.945 40.4703 213.945C40.323 213.79 40.1639 213.628 39.8458 213.303C39.3157 212.762 39.0506 212.492 38.8298 212.257C27.0567 199.754 27.0567 180.246 38.8298 167.743C39.0506 167.508 39.3157 167.238 39.8458 166.697C40.1639 166.372 40.323 166.21 40.4703 166.055C48.1056 158.055 51.1433 146.718 48.5311 135.972C48.4807 135.765 48.4242 135.544 48.311 135.104C48.1224 134.371 48.0282 134.004 47.9542 133.69C44.0098 116.976 53.7642 100.081 70.2114 95.1396C70.5199 95.0469 70.8847 94.9452 71.6143 94.7417C72.0522 94.6195 72.2711 94.5585 72.4758 94.4985C83.0884 91.3875 91.3875 83.0884 94.4985 72.4758C94.5585 72.2711 94.6195 72.0522 94.7417 71.6143C94.9452 70.8847 95.0469 70.5199 95.1396 70.2114C100.081 53.7642 116.976 44.0098 133.69 47.9542C134.004 48.0282 134.371 48.1224 135.104 48.311C135.544 48.4242 135.765 48.4807 135.972 48.5311C146.718 51.1433 158.055 48.1056 166.055 40.4703C166.21 40.323 166.372 40.1639 166.697 39.8458Z"
+                        fill="currentColor" />
+                </svg>
+                <svg viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg" fill="none" class="brand-logo-svg">
+                    <path stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"
+                        d="M23.073 88.132s65.458-26.782 88.16-36.212c8.702-3.772 38.215-15.843 38.215-15.843s13.621-5.28 12.486 7.544c-.379 5.281-3.406 23.764-6.433 43.756-4.54 28.291-9.459 59.221-9.459 59.221s-.756 8.676-7.188 10.185c-6.433 1.509-17.027-5.281-18.919-6.79-1.513-1.132-28.377-18.106-38.214-26.404-2.649-2.263-5.676-6.79.378-12.071 13.621-12.447 29.891-27.913 39.728-37.72 4.54-4.527 9.081-15.089-9.837-2.264-26.864 18.483-53.35 35.835-53.35 35.835s-6.053 3.772-17.404.377c-11.351-3.395-24.594-7.921-24.594-7.921s-9.08-5.659 6.433-11.693Z">
+                    </path>
+                </svg>
+            </div>
             <div class="brand-text">
-                <h1 class="brand-title">
-                    <a href="./index.html" style="color:inherit;text-decoration:none;">TeleYou</a>
-                </h1>
+                <h1 class="brand-title">TeleYou</h1>
+                <span class="brand-subtitle">A material you generator for telegram</span>
             </div>
         </div>
-    </header>
 
+        <div class="action-section">
+            <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme" title="Toggle theme">
+                <span class="material-symbols-rounded icon-moon">dark_mode</span>
+                <span class="material-symbols-rounded icon-sun" style="display: none;">light_mode</span>
+            </button>
+
+            <a href="https://github.com/snw-mint/teleyou" target="_blank" rel="noopener noreferrer" class="icon-btn"
+                aria-label="GitHub Repository" title="GitHub Repository">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
+                    fill="currentColor">
+                    <path
+                        d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .839-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.161 22 16.416 22 12c0-5.523-4.477-10-10-10z" />
+                </svg>
+            </a>
+        </div>
+    </header>
     <main class="legal-content">
         <a href="./index.html" class="legal-back">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor">
-                <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z"/>
+                <path d="m313-440 224 224-57 56-320-320 320-320 57 56-224 224h487v80H313Z" />
             </svg>
-            Back to generator
+            Back to homepage
         </a>
         <h1 class="legal-title">Terms of Use</h1>
-        <p class="legal-date">Effective January 2026</p>
+        <p class="legal-date">Effective March 2026</p>
 
         <div class="legal-section">
             <h2>Open source</h2>
-            <p>TeleYou is free, open-source software. You are free to use, modify, and distribute it under the MIT License below. The themes you generate are entirely yours — no restrictions apply to the output.</p>
+            <p>TeleYou is free, open-source software. You are free to use, modify, and distribute it under the MIT
+                License below. The themes you generate are entirely yours — no restrictions apply to the output.</p>
         </div>
         <div class="legal-section">
             <h2>No warranty</h2>
-            <p>TeleYou is provided as-is. We make no guarantees about theme accuracy or compatibility with all versions of Telegram. Use at your own discretion.</p>
+            <p>TeleYou is provided as-is. We make no guarantees about theme accuracy or compatibility with all versions
+                of Telegram. Use at your own discretion.</p>
         </div>
         <div class="legal-section">
             <h2>MIT License</h2>
-<pre class="legal-mit">MIT License
+            <pre class="legal-mit">MIT License
 
 Copyright (c) 2026 Snow Mint ✦
 
@@ -66,7 +98,60 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.</pre>
         </div>
     </main>
+    <div class="material-wave-divider" aria-hidden="true"></div>
 
-    <script type="module" src="./src/js/footer.js"></script>
+    <footer class="app-footer">
+        <div class="app-footer-inner">
+            <div class="footer-left">
+                <div class="footer-copyright">
+                    <span>©&nbsp;2026</span>
+                    <a href="https://github.com/snw-mint" target="_blank" rel="noopener noreferrer">Snow Mint ✦</a>
+                    <span>·</span>
+                    <a href="https://github.com/snw-mint/teleyou" target="_blank" rel="noopener noreferrer">TeleYou</a>
+                    <span>·</span>
+                    <span>MIT License</span>
+                </div>
+                <div class="footer-version">v1.0</div>
+            </div>
+            <nav class="footer-links" aria-label="Footer links">
+                <a href="./privacy.html" class="footer-link">Privacy</a>
+                <div class="footer-link-sep" aria-hidden="true"></div>
+                <a href="./terms.html" class="footer-link">Terms</a>
+                <div class="footer-link-sep" aria-hidden="true"></div>
+                <a href="https://github.com/snw-mint/teleyou" target="_blank" rel="noopener noreferrer"
+                    class="footer-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .839-.269 2.75 1.025A9.564 9.564 0 0112 6.844c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.161 22 16.416 22 12c0-5.523-4.477-10-10-10z" />
+                    </svg>
+                    GitHub
+                </a>
+            </nav>
+        </div>
+    </footer>
+
+    <script type="module" src="./src/js/global.js"></script>
+    <script>
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const iconMoon = themeToggleBtn.querySelector('.icon-moon');
+        const iconSun = themeToggleBtn.querySelector('.icon-sun');
+        const htmlElement = document.documentElement;
+
+        const applyTheme = (isDark) => {
+            htmlElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+            if (iconSun) iconSun.style.display = isDark ? 'block' : 'none';
+            if (iconMoon) iconMoon.style.display = isDark ? 'none' : 'block';
+        };
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        applyTheme(mediaQuery.matches);
+        mediaQuery.addEventListener('change', e => {
+            applyTheme(e.matches);
+        });
+        themeToggleBtn.addEventListener('click', () => {
+            const isCurrentlyDark = htmlElement.getAttribute('data-theme') === 'dark';
+            applyTheme(!isCurrentlyDark);
+        });
+    </script>
 </body>
+
 </html>
