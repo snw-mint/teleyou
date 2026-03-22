@@ -1,0 +1,83 @@
+name: Theme color issue
+description: A color mapping looks wrong in the exported theme or the live preview
+labels: ["theme-color"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template if a specific UI element in the exported theme has the wrong color — for example, a bubble background that is too dark, a text color with insufficient contrast, or a token that maps to the wrong Material You role.
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Which platform is affected?
+      options:
+        - Telegram Mobile (.attheme)
+        - Telegram Desktop (.tdesktop-theme)
+        - Live preview in browser
+        - All of the above
+    validations:
+      required: true
+
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Color mode
+      options:
+        - Light
+        - Dark
+        - AMOLED
+        - All modes
+    validations:
+      required: true
+
+  - type: input
+    id: token
+    attributes:
+      label: Affected token or UI element
+      description: Name of the theme token (e.g. `chat_inBubble`) or describe the element (e.g. "incoming message bubble background").
+      placeholder: "chat_inBubble / incoming message bubble"
+    validations:
+      required: true
+
+  - type: textarea
+    id: current
+    attributes:
+      label: Current behavior
+      description: What color or role is it using now?
+      placeholder: "Currently maps to surfaceContainerHigh, which is too similar to the outgoing bubble color."
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What should it map to, and why?
+      placeholder: "Should map to surface so there is clear visual separation between in/out bubbles."
+    validations:
+      required: true
+
+  - type: input
+    id: seed
+    attributes:
+      label: Seed color or image used
+      description: If the issue is color-specific, share the hex seed you used (e.g. `#6750A4`).
+      placeholder: "#6750A4"
+    validations:
+      required: false
+
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Screenshots or comparison
+      description: A screenshot of the broken theme alongside what you'd expect is very helpful.
+    validations:
+      required: false
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else?
+    validations:
+      required: false

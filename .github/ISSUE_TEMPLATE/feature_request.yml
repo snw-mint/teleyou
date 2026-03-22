@@ -1,0 +1,42 @@
+name: Feature request
+description: Suggest an improvement or new capability
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have an idea to make TeleYou better? Describe it here.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the limitation or pain point you're running into.
+      placeholder: "There is no way to save a palette and come back to it later without redoing everything."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: How would you like it to work?
+      placeholder: "A 'Save palette' button that stores the current HCT values in localStorage."
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you've considered
+      description: Any workarounds or other approaches worth mentioning?
+    validations:
+      required: false
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Additional context
+      description: Mockups, references to other tools, links — anything helpful.
+    validations:
+      required: false
