@@ -987,6 +987,8 @@ body {
     border-top: 1px solid color-mix(in srgb, var(--m3-on-surface) 10%, var(--m3-surface-container));
   }
   .mockup-controls,
+  .tool-description,
+  .action-section a[href*="github.com"],
   #mockup-desktop {
     display: none !important;
   }
@@ -1031,7 +1033,6 @@ body {
 }
 @media (min-width: 961px) {
   .palette-accordion {
-    pointer-events: none;
     background: transparent;
   }
   .palette-accordion summary {
